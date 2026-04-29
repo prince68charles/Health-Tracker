@@ -1,6 +1,6 @@
 """In this file we will load the repos and sucsefully conver them into readable data"""
 import requests
-
+import json
 class InvalidRepositoryError:
 
 
@@ -25,8 +25,9 @@ def load_repoistory(url, headers):
             #Here is the github repo
             response = response.json()
 
-            return response
-        
+            with open("repos.json", "w") as f:
+
+                json.dump(response, f, indent = 4)
         
     except InvalidRepositoryError:
 
