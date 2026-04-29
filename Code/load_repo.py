@@ -14,7 +14,7 @@ class InvalidRepositoryError:
 
 def load_repoistory(url, headers):
 
-    """Here we will load the repoistory for storing and convert it into a csv"""
+    """Here we will load the repoistory for storing and convert it into json"""
 
     response = requests.get(url, headers)
 
@@ -23,8 +23,11 @@ def load_repoistory(url, headers):
         if response.status_code == 200:
         
             #Here is the github repo
-            return response
+            response = response.json()
 
+            return response
+        
+        
     except InvalidRepositoryError:
 
         raise("Invalid repo, check again")
