@@ -30,16 +30,19 @@ def retreive_commits(repo: dict) -> list:
 
     return df
     
-    
 
 
-def retereive_star_growth(repo: list[dict]) -> int:
+def retereive_stars(repo: dict) -> int:
 
-     """This will reterive the number of stars in the last 90 days"""
+    """This will reterive the number of stars"""
 
+    return repo['stats']['stars']
 
-def reterive_last_commit(repo:list[dict]) -> datetime:
+def reterive_last_commit(repo: dict) -> datetime:
 
-    """Will reterive the date of the last commit"""
+    """Returns the date of the last commit, and by who"""
+    commits = retreive_commits(repo)
+
+    return commits.iloc[0,0]
 
 
