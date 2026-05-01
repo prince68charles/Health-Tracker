@@ -10,8 +10,15 @@ def retreieve_contributors(repo: list[dict]) -> list:
 
 
     """This will reterive a list of contriubuters for each repoistory"""
+    
+    #Read the json file
+    repo_df = pd.json_normalize(repo['Contributors'])
 
+    logins = repo_df['login']
 
+    subset = repo_df[['login', 'contributions']]
+
+    return subset
 
 def retreive_last_commit(repo: list[dict]) -> list:
 
