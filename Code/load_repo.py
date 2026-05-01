@@ -24,7 +24,10 @@ def load_repoistory(url, headers, owner, repo):
     #Gather languages
     lang_url = f"{url}/languages"
     languages = requests.get(lang_url, headers).json()
-
+    
+    #Gather commits
+    commit_url = f"{url}/contributors"
+    contraibutors = requests.get(commit_url, headers).json()
 
     #Gather full file
     branch = metadata.get('default_branhc', 'main')
@@ -48,7 +51,9 @@ def load_repoistory(url, headers, owner, repo):
         "languages": languages,
         "file-structure": [{"path": item["path"], "type": item["type"], "size": item.get("size")}
             for item in tree_data.get("tree", [])
-        ]
+        ],
+
+        "Contributors" : contraibutors
 
     }
 
