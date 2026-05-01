@@ -20,10 +20,17 @@ def retreieve_contributors(repo: list[dict]) -> list:
 
     return subset
 
-def retreive_last_commit(repo: list[dict]) -> list:
+def retreive_commits(repo: dict) -> list:
 
-    """This will reterive a list of commits for each repo"""
+    """This will reterive a list of commits for each repo along with their dates"""
 
+    commit_list = repo["Commits"]
+
+    df = pd.DataFrame(commit_list)
+
+    return df
+    
+    
 
 
 def retereive_star_growth(repo: list[dict]) -> int:
@@ -31,7 +38,7 @@ def retereive_star_growth(repo: list[dict]) -> int:
      """This will reterive the number of stars in the last 90 days"""
 
 
-def recency_score(repo:list[dict]) -> datetime:
+def reterive_last_commit(repo:list[dict]) -> datetime:
 
     """Will reterive the date of the last commit"""
 
