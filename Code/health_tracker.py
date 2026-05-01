@@ -3,10 +3,11 @@
 2: It will then plot the overall health via matplotlib
 """
 
-import data_reteriver
+from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sn
 
-
-def calculate_score(contriubtions, commits, stars, date):
+def calculate_score(contriubtions, commits, stars, date_to_check):
 
     """
     Calculates a repository health score based on activity and community impact.
@@ -21,8 +22,6 @@ def calculate_score(contriubtions, commits, stars, date):
     maintains the score, while older activity is penalized using a time-decay 
     function to account for project obsolescence.
 
-    **Formula:**
-    $$Health = (0.4C_{ont} + 0.35C_{omm} + 0.25S) \cdot \text{decay}(date)$$
 
     :param contributions: int, number of unique contributors.
     :param commits: int, total commit count.
@@ -31,21 +30,48 @@ def calculate_score(contriubtions, commits, stars, date):
     :return: float, normalized health score (0-100).
     """
 
+    #Calculate Score
+    regular_score = 0.40*(len(contriubtions)) + 0.35*(len(commits)) + 0.25*(stars)
+
+    #Grab todays date
+    today = datetime.now()
+    
+    #Ensure date_to_check is a datetime object (if it's a string)
+    if isinstance(date_to_check, str):
+        
+        date_to_check = datetime.fromisoformat(date_to_check)
+    
+    duration = today - date_to_check
+    final_score = regular_score
+
+    #Find pas days
+    days_past = duration.days
+    
+   
+    if days_past >= 90:
+
+        final_score = 0.0
+
+    elif days_past >= 30:
+
+        final_score = regular_score - 0.30
+
+    elif days_past >= 10:
+
+        final_score = regular_score - 0.10
+        
+    
+    return max(0.0, final_score)
 
 
-def plot_score(cont_score, commit_score, star_score, date_score):
+
+def plot_score(repo_name, score):
 
     
     """
     Generates a visual representation of repository health metrics.
 
-    ### Visualization Components:
-    *   **Data Points:** Maps individual scores for Contributions, Commits, 
-        Stars, and Recency.
-    *   **Plot Type:** Typically renders a **Radar (Spider) Chart** to show 
-        balance across categories or a **Bar Chart** for direct comparison.
-    *   **Normalization:** Ensures all scores are scaled (e.g., 0-1.0) for 
-        visual consistency.
+    
 
     ### Parameters:
     :param cont_score: float, weighted contribution metric.
@@ -54,3 +80,16 @@ def plot_score(cont_score, commit_score, star_score, date_score):
     :param date_score: float, calculated recency/decay factor.
     """
 
+
+    #Construct the graph
+    
+    fig, ax = plt.subplots(figsize = (8,5))
+    sn.barplot(x=repo_name, y = score, ax=ax)
+
+    ax.set_title("Healthines of Repoistories")
+    ax.set_xlabel("Repoistory")
+    ax.set_ylabel("Score")
+
+
+    fig.savefig("Healthines-Tracker.png", dpi = 120)
+    plt.close(fig)
